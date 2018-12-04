@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Title</title>
+    <script>
+        // 是每个单元都能独立化
+        var Class1 = function (a, b, c) {
+            this.a = a;
+            this.b = b;
+            this.c = c;
+        };
+
+        var Class2 = function (d, e) {
+            this.d = d;
+            this.e = e;
+        }
+
+        var BridgeClass = function (a, b, c, d, e) {
+            this.class1 = new Class1(a, b, c);
+            this.class2 = new Class2(d, e);
+        }
+    </script>
+</head>
+<body>
+
+</body>
+</html>

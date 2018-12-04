@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Title</title>
+    <script src="../commons/CommonUtil.js"></script>
+    <script>
+        // 享元模式
+        // 优化web日历  年对象 月份对象  天对象
+
+        var CalendarInterface = new BXP.Interface('CalendarInterface', ['display']);
+
+        var CalendarYear = function (year, parent) {
+            this.year = year;
+            this.element = document.createElement('div');
+            this.element.style = 'none';
+            parent.appendChild(this.element);
+
+            // 判断是否能是闰年
+            var isLeapYear = function (year) {
+                return (year > 0) && !(year % 4) && ((year % 100) || !(year % 400));
+            }
+
+            this.months = [];
+            // 当前年月份多少天
+            this.numDays = [31, isLeapYear(this.year) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
+            for (var i = 0; i < 12; i++) {
+                this.months[i] = new CalendarMonth(i,this.numDays[i],this.element);
+            }
+        };
+        CalendarYear.prototype = {
+            constructor: CalendarYear,
+            display: function () {
+                for (var i = 0; i < this.months.length; i++) {
+                    this.months[i].display();
+                }
+                // 显示出来月份
+                this.element.style.display = 'block';
+            }
+        }
+        var CalendarMonth = function (monthNum,numDays,parent) {
+            this.monthNum = monthNum;
+            this.element = document.createElement('div');
+            this.element.style = 'none';
+            parent.appendChild(this.element);
+            
+            this.days = [];
+            for (var i = 0; i < numDays; i++) {
+                this.days[i] = calendarDaySingleIntance;
+            }
+        };
+
+        CalendarMonth.prototype = {
+            constructor: CalendarMonth,
+            display: function () {
+                for (var i = 0; i < this.days.length; i++) {
+                    this.days[i].display(i+1,this.element);
+                }
+                // 显示出来天数
+                this.element.style.display = 'block';
+            }
+        }
+
+        var CalendarDay = function () {
+
+        }
+        CalendarDay.prototype = {
+            constructor: CalendarDay,
+            display: function (date,parent) {
+                var element = document.createElement('div');
+                parent.appendChild(element);
+                element.style.display = 'inline-block';
+                element.innerHTML = date;
+            }
+        }
+
+        // 单例对象
+        var calendarDaySingleIntance = new CalendarDay();
+
+        window.onload = function () {
+            var mydiv = document.getElementById('mydiv');
+
+            var myyear1 = new CalendarYear(2018,mydiv);
+            var myyear2 = new CalendarYear(2019,mydiv);
+            var myyear3 = new CalendarYear(2020,mydiv);
+            var myyear4 = new CalendarYear(2021,mydiv);
+            var myyear5 = new CalendarYear(2022,mydiv);
+            var myyear6 = new CalendarYear(2023,mydiv);
+            var myyear7 = new CalendarYear(2024,mydiv);
+            myyear1.display();
+            myyear2.display();
+            myyear3.display();
+            myyear4.display();
+            myyear5.display();
+            myyear6.display();
+            myyear7.display();
+        }
+    </script>
+</head>
+<body>
+<div id="mydiv"></div>
+</body>
+</html>

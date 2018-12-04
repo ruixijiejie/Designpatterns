@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Title</title>
+    <script src="../commons/CommonUtil.js"></script>
+    <script>
+        // 命令模式 分装方法的调用的方式
+        // 要执行一件事情 ： 1 命令1  2 命令2  3 命令3
+        // 命令模式的母的 ： 把调用命令的调用者和 执行命令的接受者
+        // 命令模式
+
+        // 命令模式的主要概念： 调用者只需要执行相应的命令即可，不需要关注命令到底是怎样执行的，执行者他才是真正处理这条命令的内部实现。
+
+        // 分类
+        /*1.简单命令模式
+        * 2.复杂命令模式
+        * 3.用闭包去分装命令模式 更加灵活的调用命令*/
+
+        var CommandInterface = new BXP.Interface('CommandInterface',['execute']);
+
+        // 有一个按钮  点击按钮 触发几个元素去执行一些动画效果
+        // 2个命令 1:start  2:stop
+
+        var StartCommand = function (obj) {
+            this.ad = obj;
+        };
+        StartCommand.prototype.execute = function () {
+            this.ad.start();
+        }
+        var StopCommand = function (obj) {
+            this.ad = obj;
+        }
+        StopCommand.prototype.execute = function () {
+            this.ad.stop();
+        }
+
+        var startCommand = new StartCommand(obj);
+        startCommand.execute();
+        var stopCommand = new StopCommand(obj);
+        stopCommand.execute();
+
+
+        // 闭包模式
+        function MakeStart(obj) {
+            return function () {
+                obj.start();
+            }
+        }
+
+        function MakeStop(obj) {
+            return function () {
+                obj.stop();
+            }
+        }
+
+        var startCommand = new MakeStart(obj);
+        startCommand();
+
+        var stopCommand = new MakeStop(obj);
+        stopCommand();  // 命令结束了
+
+        // 客户  调用者 接受者
+        // 客户创建命令 调用这个执行命令 接受者在命令执行时进行相应的操作
+    </script>
+</head>
+<body>
+
+</body>
+</html>

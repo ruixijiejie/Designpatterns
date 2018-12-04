@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Title</title>
+    <script src="../commons/common.js"></script>
+    <script>
+        // 搭建一个工厂环境
+        function CarShop() {
+
+        }
+
+        CarShop.prototype = {
+            constructor: CarShop,
+            sellCar: function (type) {
+                var car;
+                switch (type) {
+                    case 'Benz':
+                        car = new Benz();
+                        break;
+                    case 'Bmw':
+                        car = new Bmw();
+                        break;
+                    case 'Audi':
+                        car = new Audi();
+                        break;
+                    default:
+                        'not buy it'
+                }
+                // 检验接口实现
+                SoHyun.Interface.ensureImplements(car, CarInterface);
+                return car;
+            }
+        }
+
+        // 接口对象
+        var CarInterface = new SoHyun.Interface('CarInterface', ['start', 'run']);
+
+        // SuperClass
+        function BaseCar() {
+
+        }
+        BaseCar.prototype = {
+            constructor: BaseCar,
+            start: function () {
+                console.log(this.constructor.name + 'start');
+            },
+            run: function () {
+                console.log(this.constructor.name + 'run');
+            }
+        }
+
+        // 都是车
+        function Benz() {
+
+        };
+        // 注意关键问题： 子类先继承父类，然后子类再扩展自己的方法
+        SoHyun.extend(Benz,BaseCar);
+        Benz.prototype.driveBenz = function () {
+            console.log('Benz..drive');
+        }
+       /* Benz.prototype = {
+            start: function () {
+                'Benz is start'
+            },
+            run: function () {
+                'Benz is run'
+            }
+        }*/
+
+        function Bmw() {
+
+        };
+        SoHyun.extend(Bmw,BaseCar);
+        Bmw.prototype.driveBmw = function () {
+            console.log('Bmw..drive');
+        }
+        /*Bmw.prototype = {
+            start: function () {
+                'Bmw is start'
+            },
+            run: function () {
+                'Bmw is run'
+            }
+        }*/
+
+        function Audi() {
+
+        }
+        SoHyun.extend(Audi,BaseCar);
+        Audi.prototype.driveAudi = function () {
+            console.log('Audi..drive');
+        }
+        /*Audi.prototype = {
+            start: function () {
+                'Audi is start'
+            },
+            run: function () {
+                'Audi is run'
+            }
+        }*/
+
+        var shop = new CarShop();
+        var car = shop.sellCar('Benz');
+        car.start();
+        car.run();
+        car.driveBenz()
+        var car2 = shop.sellCar('Bmw');
+        car2.start();
+        car2.run();
+        car2.driveBmw()
+
+
+    </script>
+</head>
+<body>
+
+</body>
+</html>

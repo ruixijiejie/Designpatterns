@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Title</title>
+    <script src="../commons/CommonUtil.js"></script>
+    <script>
+        // 门面模式 作用
+        /*1.简化类的接口
+        * 2.消除类与使用它的客户代码之间的耦合
+        * 简化API 最经典的就是事件*/
+
+        // 做一件事件， 必须调用两个函数 分别是a,b
+       /*
+       function a(x) {
+
+        }
+        function b(y) {
+
+        }
+
+        function ab(x,y) {
+            a(x);
+            b(y);
+        }
+        */
+
+
+        // 需求： 现在有一个简单的需求： 获得页面上的元素，给得到的元素设置css样式
+        // 同时设置多个css样式
+        window.onload = function () {
+            /*var element = document.getElementById('div1');
+            element.style.color = 'red';*/
+
+            // 给多个元素设置同一样式
+
+            // 给多个元素设置不同样式
+
+            setCss(['div1','div2','div3'],{
+                position: 'absolute',
+                background: 'pink',
+                fontsize: '18px',
+                left: '100px'
+            })
+
+            // setStyle(['div1','div2','div3'],'color','blue');
+        }
+
+        // 简单门面模式
+        function setStyle(elementsId,prop,val) {
+            for (var i = 0; i < elementsId.length; i++) {
+                document.getElementById(elementsId[i]).style[prop] = val;
+            }
+        }
+
+        // 门面模式
+        function setCss(elementsId,options) {
+            for (var prop in options) {
+                if (!options.hasOwnProperty(prop)) continue;
+                setStyle(elementsId,prop,options[prop]);
+            }
+        }
+
+
+    </script>
+</head>
+<body>
+<div id="div1">我是div1</div>
+<div id="div2">我是div2</div>
+<div id="div3">我是div3</div>
+</body>
+</html>

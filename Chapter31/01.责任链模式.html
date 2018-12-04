@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Title</title>
+    <script src="../commons/CommonUtil.js"></script>
+    <script>
+        // 责任链模式 发出者 接受者
+        // 发出者和接受者之间的耦合
+        /*
+        * 发送者知道链中的第一个接受者，它向这个接受者发出请求
+        * 每一个接受者都对请求进行分析，要么处理他，要么往下传递
+        * 每一个接受者知道的其他对象只有一个，即他的下家对象
+        * 如果没有任何接受者处理请求，那么请求将从链上移开，不同的实现对此有不同的反应
+        * */
+
+        // 做项目  项目经理  task  项目组[a,b,c,d]
+
+        // 任务的类  发送者
+        var Assign = function (task) {
+            this.task = task;
+        }
+
+        // 接收任务的类
+        var WorkFlow = function (assign) {
+            this.assign = assign;
+        }
+        WorkFlow.prototype = {
+            constructor: WorkFlow,
+            // 分析当前的对象到底谁能去执行
+            filterHandler: function (es) {
+                for (var i = 0, len = es.length; i < len; i++) {
+                    if (this.assign.task === es[i].cando) {
+                        return es[i].todo();
+                    }
+                }
+                return;
+            }
+        }
+
+        // 处理者
+        var Executor = function (name, cando) {
+            this.name = name;
+            this.cando = cando;
+        }
+        Executor.prototype = {
+            constructor: Executor,
+            todo: function () {
+                document.write(this.name + '开发：' + this.cando);
+            }
+        }
+
+        // 实例化4个处理对象
+        var e1 = new Executor('小A','JavaScript编程');
+        var e2 = new Executor('小B','css编程');
+        var e3 = new Executor('小C','Java编程');
+        var e4 = new Executor('小D','sql编程');
+
+        // 实例化任务对象
+        var assign = new Assign('sql编程');
+        // 处理任务的类实例
+        var wf = new WorkFlow(assign);
+        wf.filterHandler([e1,e2,e3,e4]);
+    </script>
+</head>
+<body>
+
+</body>
+</html>

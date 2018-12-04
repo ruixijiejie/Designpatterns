@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Title</title>
+    <script>
+        // 特权函数
+       /*
+       var PublicClass = function () {
+            // private
+            var name = '张三';
+
+            // getter setter
+            this.getName = function () {   // 特权函数
+                return name;
+            }
+        }
+
+        var p1 = new PublicClass();
+        console.log(p1.getName());
+        */
+
+        var PublicClass = function () {
+          // 私有化变量
+            var privateMethod = function () {
+                console.log('执行了一个很复杂的操作...');
+            };
+            
+            // 特权函数去访问这个私有的独立单元
+            this.bridgeMethod = function () {
+                return privateMethod();
+            }
+        }
+
+        var p1 = new PublicClass();
+        p1.bridgeMethod();
+
+    </script>
+</head>
+<body>
+
+</body>
+</html>

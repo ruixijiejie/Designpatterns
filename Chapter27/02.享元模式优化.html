@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Title</title>
+    <script src="../commons/CommonUtil.js"></script>
+    <script>
+        // 享元模式： 优化的设计模式 (优化： 时间 [代码的运行时间] 空间[web浏览器内存])
+        // 内在数据(static 出厂商  型号  出厂日期)  外在数据(拥有者 车牌号  登记日期)
+
+        // 出厂商  型号  出厂日期  拥有者 车牌号  登记日期
+        var Car = function (make, model, year) {
+            this.make = make;
+            this.model = model;
+            this.year = year;
+        }
+        Car.prototype = {
+            constructor: Car,
+            getMake: function () {
+                return this.make;
+            },
+            getModel: function () {
+                return this.model;
+            },
+            getYear: function () {
+                return this.year;
+            },
+
+        }
+
+        // 工厂模式(闭包工厂)
+        var CarFactory = (function () {
+            // 已经生产好的car
+            var createCars = {};
+            return {
+                createCar: function (make, model, year) {
+                    // 如果createCar对象中已经存在当前的make，modle，year
+                    if (createCars[make + model + year]) {
+                        return createCars[make + model + year];
+                    } else {
+                        var car = new Car(make, model, year);
+                        createCars[make + model + year] = car;
+                        return car;
+                    }
+                }
+            }
+        })()
+        // 单体模式 外在数据和内在数据结合在一起
+        var CarRecordManager = (function () {
+            // 把登记好的汽车放在这里
+            var carRecordDataBase = {};
+            return {
+                addCarRecord: function (make, model, year, owner, tag, renewDate) {
+                    var car = CarFactory.createCar(make, model, year);
+                    carRecordDataBase[tag] = {
+                        owner: owner,
+                        renewDate: renewDate,
+                        car: car
+                    }
+                },
+                renewRegistration: function (tag, newRenewDate) {
+                    carRecordDataBase[tag].renewDate = newRenewDate;
+                }
+            }
+        })()
+
+        var arr = [];
+
+        var stime = new Date().getTime();
+
+        for (var i = 0; i < 5000000; i++) {
+            // runtime: 526ms  web: 230
+            arr.push(CarRecordManager.addCarRecord('上海大众', '迈腾', '2012-02-03', 'bxp', 'bj0011', '2013-04-01'));
+        }
+
+        var etime = new Date().getTime();
+        alert(etime - stime);
+    </script>
+</head>
+<body>
+
+</body>
+</html>

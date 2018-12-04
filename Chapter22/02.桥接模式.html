@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Title</title>
+    <script src="../commons/CommonUtil.js"></script>
+    <script src="../jquery/jquery-1.11.1.min.js"></script>
+    <script>
+        // 桥接模式 主要的作用是将抽象和现实分离，使他们可以完全独立变化
+        // 应用场景： 事件监听回掉机制 用户点击一个按钮，向服务端发送消息
+
+        // 利用桥模式，分开两个业务逻辑单元
+        $(function () {
+            // 1.前台业务逻辑  让这一段代码处理前台事件的注册和绑定
+            var inp = document.getElementById('inp');
+            // 用事件注册的方式向元素上添加事件
+            BXP.EventUtil.addHandler(inp, 'click', bridgeHandler);
+
+
+            // 利用桥模式分开
+            function bridgeHandler() {
+                var msg = this.value;
+                sendReq(msg);
+            }
+
+            // 2.后台业务逻辑
+            function sendReq(msg) {   // 处理后台函数
+                // ajax
+                // 1.后台服务器的地址
+                // 2.一个对象或一个字符串
+                // 3.回调函数
+                /* $.post('URL', {msg: this.value}, function (result) {
+                     // callback 处理
+                 })*/
+                console.log('发送了指定的数据到后台：' + msg);
+            }
+
+            // 单元测试的时候
+            sendReq('我也是数据...');
+        })
+    </script>
+</head>
+<body>
+<input type="button" id="inp" value="我是数据。。">
+</body>
+</html>

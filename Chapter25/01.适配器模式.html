@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Title</title>
+    <script src="../commons/CommonUtil.js"></script>
+    <script>
+        // 适配器： 日常生活中  ps2接口
+        // 新电脑(usb)  USB转换器
+
+        /*
+        var obj = {
+             str1: '111',
+             str2: '222',
+             str3: '333'
+         };
+
+         function adapter(obj) {
+             interfaceMethod(obj.str1,obj.str2,obj.str3)
+         }
+
+         function interfaceMethod(x,y,z) {
+             // 复杂的操作
+         }
+         */
+
+        // 企业开发中 JavaScript库(extjs jquery  yui prototype... ded ...)
+
+        // prototype  $ function(不需要传递任何形参)
+
+        function $() {
+            var elements = [];
+            for (var i = 0; i < arguments.length; i++) {
+                var element = arguments[i];
+                if (typeof element == 'string')
+                    element = document.getElementById(element);
+                if (arguments.length == 1)
+                    return element;
+                elements.push(element);
+            }
+            return elements;
+        }
+
+        // 雅虎   类型不是字符串，就是数组
+        var YAHOO = {};
+        YAHOO.get = function (el) {
+            if (typeof el == 'string') {
+                return document.getElementById(el);
+            }
+            if (el instanceof Array) {
+                var elements = [];
+                for (var i = 0; i < el.length; i++) {
+                    elements[elements.length] = YAHOO.get(el[i]);
+                }
+                return elements;
+            }
+            if (el) {
+                return el;
+            }
+            return null;
+        }
+
+
+        YAHOO.get = YUIToPrototypeAdapter;
+
+        function YUIToPrototypeAdapter() {
+            // 对于yui开发人员来说，永远传递一个参数
+            if (arguments.length == 1) {
+                var e = arguments[0];
+                return $.apply(window, e instanceof Array ? e : [e]);
+            } else {
+                return $.apply(window, arguments);
+            }
+        }
+
+        window.onload = function () {
+            // prototype 开发习惯的写法
+            /* var domarr = $('inp1','inp2');
+             alert(domarr);*/
+
+
+            // 雅虎开发人员习惯写法
+            /* var domarr = YAHOO.get(['inp1','inp2']);
+             alert(domarr);*/
+
+            var domarr = YAHOO.get('inp1', 'inp2');
+            alert(domarr);
+
+        }
+
+    </script>
+</head>
+<body>
+<input type="text" id="inp1">
+<input type="text" id="inp2">
+</body>
+</html>
